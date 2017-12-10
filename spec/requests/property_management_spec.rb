@@ -15,7 +15,6 @@ RSpec.describe 'Properties API', type: :request do
 
   describe 'GET /properties/:id' do
     before do
-      # headers = { "CONTENT_TYPE" => "application/json" }
       get "/properties/#{property_id}"
     end
 
@@ -26,12 +25,20 @@ RSpec.describe 'Properties API', type: :request do
       end
 
       it 'returns status code 200' do
-        expect(response.code).to eq(200)
+        expect(response.code).to eq('200')
       end
     end
 
     context 'when record does not exist' do
       let(:property_id) { 999 }
+
+      it 'returns status code 404' do
+        expect(response.body).to match(/Couldn't find Property/)
+      end
+    end
+
+    context 'when request is malformed' do
+      let(:property_id) { 'cat' }
 
       it 'returns status code 404' do
         expect(response.body).to match(/Couldn't find Property/)
