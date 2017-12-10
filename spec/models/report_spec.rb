@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-describe PropertyCashflowReport do
+describe Report do
   let!(:time_frame) { Fabricate(:time_frame) }
   let!(:grouping) do
-    Fabricate(:comparison_grouping,
+    Fabricate(:report_grouping,
               time_frame: time_frame)
   end
 
   let!(:report) do
-    Fabricate(:property_cashflow_report,
-              comparison_grouping: grouping,
+    Fabricate(:report,
+              report_grouping: grouping,
               time_frame: time_frame)
   end
 
@@ -25,13 +25,13 @@ describe PropertyCashflowReport do
   let!(:hoa_fee) do
     Fabricate(:cashflow_item,
               cashflow_type: expense,
-              property_cashflow_report: report)
+              report: report)
   end
 
   let!(:rent) do
     Fabricate(:cashflow_item,
               cashflow_type: income,
-              property_cashflow_report: report)
+              report: report)
   end
 
   context 'report associations' do
@@ -40,7 +40,7 @@ describe PropertyCashflowReport do
     end
 
     it 'returns the comparison grouping it is associated with' do
-      expect(report.comparison_grouping).to eq(grouping)
+      expect(report.report_grouping).to eq(grouping)
     end
   end
 end

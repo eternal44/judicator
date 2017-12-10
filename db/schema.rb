@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171203210150) do
+ActiveRecord::Schema.define(version: 20171210174140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20171203210150) do
   create_table "cashflow_items", id: :serial, force: :cascade do |t|
     t.integer "amount", null: false
     t.integer "cashflow_type_id", null: false
-    t.integer "property_cashflow_report_id", null: false
+    t.integer "report_id", null: false
   end
 
   create_table "cashflow_types", id: :serial, force: :cascade do |t|
@@ -32,17 +32,6 @@ ActiveRecord::Schema.define(version: 20171203210150) do
     t.string "name", null: false
     t.integer "county_id", null: false
     t.integer "state_id", null: false
-  end
-
-  create_table "comparison_groupings", id: :serial, force: :cascade do |t|
-    t.integer "bed_count", null: false
-    t.integer "bath_count", null: false
-    t.integer "square_feet"
-    t.integer "year_built"
-    t.integer "parking_spots"
-    t.integer "parking_type_id", null: false
-    t.integer "zipcode_id", null: false
-    t.integer "time_frame_id", null: false
   end
 
   create_table "counties", id: :serial, force: :cascade do |t|
@@ -75,18 +64,29 @@ ActiveRecord::Schema.define(version: 20171203210150) do
     t.integer "status_id", null: false
   end
 
-  create_table "property_cashflow_reports", id: :serial, force: :cascade do |t|
+  create_table "property_classifications", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "report_groupings", id: :serial, force: :cascade do |t|
+    t.integer "bed_count", null: false
+    t.integer "bath_count", null: false
+    t.integer "square_feet"
+    t.integer "year_built"
+    t.integer "parking_spots"
+    t.integer "parking_type_id", null: false
+    t.integer "zipcode_id", null: false
+    t.integer "time_frame_id", null: false
+  end
+
+  create_table "reports", id: :serial, force: :cascade do |t|
     t.integer "list_price", null: false
     t.integer "days_on_market"
     t.boolean "is_short_sale"
     t.integer "property_id", null: false
     t.integer "time_frame_id", null: false
-    t.integer "comparison_grouping_id", null: false
+    t.integer "report_grouping_id", null: false
     t.integer "possession_type_id", null: false
-  end
-
-  create_table "property_classifications", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
   end
 
   create_table "states", id: :serial, force: :cascade do |t|
@@ -110,20 +110,20 @@ ActiveRecord::Schema.define(version: 20171203210150) do
   end
 
   add_foreign_key "cashflow_items", "cashflow_types"
-  add_foreign_key "cashflow_items", "property_cashflow_reports"
+  add_foreign_key "cashflow_items", "reports"
   add_foreign_key "cashflow_types", "time_frames"
   add_foreign_key "cities", "counties"
   add_foreign_key "cities", "states"
-  add_foreign_key "comparison_groupings", "parking_types"
-  add_foreign_key "comparison_groupings", "zipcodes"
   add_foreign_key "counties", "states"
   add_foreign_key "properties", "property_classifications"
   add_foreign_key "properties", "statuses"
   add_foreign_key "properties", "zipcodes"
-  add_foreign_key "property_cashflow_reports", "comparison_groupings"
-  add_foreign_key "property_cashflow_reports", "possession_types"
-  add_foreign_key "property_cashflow_reports", "properties"
-  add_foreign_key "property_cashflow_reports", "time_frames"
+  add_foreign_key "report_groupings", "parking_types"
+  add_foreign_key "report_groupings", "zipcodes"
+  add_foreign_key "reports", "possession_types"
+  add_foreign_key "reports", "properties"
+  add_foreign_key "reports", "report_groupings"
+  add_foreign_key "reports", "time_frames"
   add_foreign_key "zipcodes", "cities"
   add_foreign_key "zipcodes", "counties"
   add_foreign_key "zipcodes", "states"

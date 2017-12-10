@@ -1,4 +1,4 @@
-Fabricator(:comparison_grouping) do
+Fabricator(:report_grouping) do
   bed_count 3
   bath_count 2
   square_feet 2_000
