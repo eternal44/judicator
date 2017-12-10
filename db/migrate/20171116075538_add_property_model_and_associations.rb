@@ -1,4 +1,4 @@
-class AddPropertyModelAndAssociations < ActiveRecord::Migration
+class AddPropertyModelAndAssociations < ActiveRecord::Migration[5.0]
 
   def change
     create_table :properties do |t|

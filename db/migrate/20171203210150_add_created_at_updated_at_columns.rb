@@ -1,4 +1,4 @@
-class AddCreatedAtUpdatedAtColumns < ActiveRecord::Migration
+class AddCreatedAtUpdatedAtColumns < ActiveRecord::Migration[5.0]
   def change_table
    ["cashflow_items",
    "cashflow_types",

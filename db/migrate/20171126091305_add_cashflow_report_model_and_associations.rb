@@ -1,4 +1,4 @@
-class AddCashflowReportModelAndAssociations < ActiveRecord::Migration
+class AddCashflowReportModelAndAssociations < ActiveRecord::Migration[5.0]
   def change
     create_table :property_cashflow_reports do |t|
       t.integer :list_price, null: false
