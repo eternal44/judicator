@@ -7,10 +7,13 @@ describe Report do
               time_frame: time_frame)
   end
 
+  let!(:property) { Fabricate(:property) }
+
   let!(:report) do
     Fabricate(:report,
               report_grouping: grouping,
-              time_frame: time_frame)
+              time_frame: time_frame,
+              property: property)
   end
 
   let!(:expense) { Fabricate(:cashflow_type, time_frame: time_frame) }
@@ -41,6 +44,10 @@ describe Report do
 
     it 'returns the comparison grouping it is associated with' do
       expect(report.report_grouping).to eq(grouping)
+    end
+
+    it 'returns associated property' do
+      expect(report.property).to eq(property)
     end
   end
 end
