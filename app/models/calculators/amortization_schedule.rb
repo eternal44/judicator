@@ -21,7 +21,16 @@ class Calculators::AmortizationSchedule
     if remaining_balance < 1
       schedule
     else
-      monthly_payment = generate_monthly_payment(remaining_balance)
+      period_payment = @scheduled_monthly_payment_amount
+      additional_payment_instructions = @opts[:additional_payments]
+
+      if additional_payment_instructions
+        if schedule.count >= additional_payment_instructions.fetch(:start_period)
+          period_payment += additional_payment_instructions.fetch(:amount_per_period)
+        end
+      end
+
+      monthly_payment = generate_monthly_payment(remaining_balance, period_payment)
 
       schedule << monthly_payment
 
@@ -31,15 +40,31 @@ class Calculators::AmortizationSchedule
     end
   end
 
+  def self.format_amounts(schedule, opts={})
+    schedule.map do |period|
+      total_payment_for_month = period.fetch(:total_payment_for_month).to_i
+      principal_amount = period.fetch(:principal_amount).to_i
+      interest_amount = period.fetch(:interest_amount).to_i
+      principal_balance_amount = period.fetch(:principal_balance_amount).to_i
+
+      period[:total_payment_for_month] = total_payment_for_month
+      period[:principal_amount] = principal_amount
+      period[:interest_amount] = interest_amount
+      period[:principal_balance_amount] = interest_amount
+
+      period
+    end
+  end
+
   private
 
-  def generate_monthly_payment(remaining_balance)
+  def generate_monthly_payment(remaining_balance, period_payment_amount)
     interest_amount = calculate_interest_amount(remaining_balance)
-    principal_amount = calculate_principal_amount(remaining_balance, interest_amount)
+    principal_amount = calculate_principal_amount(remaining_balance, period_payment_amount, interest_amount)
     principal_balance_amount = remaining_balance - principal_amount
 
     {
-      total_payment_for_month: @scheduled_monthly_payment_amount,
+      total_payment_for_month: period_payment_amount,
       principal_amount: principal_amount,
       interest_amount: interest_amount,
       principal_balance_amount: principal_balance_amount
@@ -50,14 +75,11 @@ class Calculators::AmortizationSchedule
     remaining_balance * @monthly_interest_rate
   end
 
-  def calculate_principal_amount(remaining_balance, interest_amount, opts={})
-    additional_payment = opts.fetch(:additional_payment, 0)
-
-    monthly_payment = @scheduled_monthly_payment_amount + additional_payment
-    if remaining_balance < @scheduled_monthly_payment_amount
+  def calculate_principal_amount(remaining_balance, period_payment_amount, interest_amount, opts={})
+    if remaining_balance < period_payment_amount
       remaining_balance
     else
-      @scheduled_monthly_payment_amount - interest_amount
+      period_payment_amount - interest_amount
     end
   end
 end
