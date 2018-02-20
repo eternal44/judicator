@@ -5,10 +5,11 @@ class Calculators::AmortizationSchedule
 
   def initialize(scheduled_monthly_payment_amount:,
                 starting_principal_balance:,
-                annual_interest_rate:)
+                annual_interest_rate:,
+                opts:)
     @scheduled_monthly_payment_amount = scheduled_monthly_payment_amount
     @monthly_interest_rate = (annual_interest_rate / 12)
-
+    @opts = opts
     @starting_principal_balance = starting_principal_balance
   end
 
@@ -49,7 +50,10 @@ class Calculators::AmortizationSchedule
     remaining_balance * @monthly_interest_rate
   end
 
-  def calculate_principal_amount(remaining_balance, interest_amount)
+  def calculate_principal_amount(remaining_balance, interest_amount, opts={})
+    additional_payment = opts.fetch(:additional_payment, 0)
+
+    monthly_payment = @scheduled_monthly_payment_amount + additional_payment
     if remaining_balance < @scheduled_monthly_payment_amount
       remaining_balance
     else

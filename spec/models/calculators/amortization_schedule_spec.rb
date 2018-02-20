@@ -10,7 +10,8 @@ describe Calculators::AmortizationSchedule do
       {
         starting_principal_balance: starting_principal_balance,
         annual_interest_rate: annual_interest_rate,
-        scheduled_monthly_payment_amount: scheduled_monthly_payment_amount
+        scheduled_monthly_payment_amount: scheduled_monthly_payment_amount,
+        opts: {}
       }
     end
 
