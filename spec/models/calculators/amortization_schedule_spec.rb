@@ -1,30 +1,30 @@
 require 'rails_helper'
 
 describe Calculators::AmortizationSchedule do
-  let(:starting_principal_balance) { 100_000_00.rationalize }
-  let(:annual_interest_rate) { 0.045.rationalize }
-  let(:scheduled_monthly_payment_amount) { 506_69.rationalize }
+  let(:starting_principal_cents) { 80_000_00.rationalize }
+  let(:annual_interest_rate) { 0.055.rationalize }
+  let(:scheduled_period_payment_cents) { 454_23.rationalize }
 
   context 'with the correct inputs' do
 
-    let(:monthly_payment_params) do
+    let(:period_payment_params) do
       {
-        starting_principal_balance: starting_principal_balance,
+        starting_principal_cents: starting_principal_cents,
         annual_interest_rate: annual_interest_rate,
-        scheduled_monthly_payment_amount: scheduled_monthly_payment_amount,
+        scheduled_period_payment_cents: scheduled_period_payment_cents,
         opts: {}
       }
     end
 
     let(:schedule) do
-      described_class.generate(monthly_payment_params)
+      described_class.generate(period_payment_params)
     end
 
-    it 'the principal and interest should equal the monthly payment' do
+    it 'the principal and interest should equal the period payment' do
       mid_mark = schedule[180]
       expected_total = mid_mark[:principal_amount] + mid_mark[:interest_amount]
 
-      expect(expected_total.to_i).to eq(scheduled_monthly_payment_amount.to_i)
+      expect(expected_total.to_i).to eq(scheduled_period_payment_cents.to_i)
     end
 
     it 'last payment should have 0 remaining balance' do
@@ -37,7 +37,7 @@ describe Calculators::AmortizationSchedule do
   end
 
   context 'options params' do
-    let(:starting_principal_balance) { 80_000_00.rationalize }
+    let(:starting_principal_cents) { 80_000_00.rationalize }
     let(:annual_interest_rate) { 0.055.rationalize }
     let(:start_period) { 1 }
     let(:additional_amount_per_period) { 2_800_00 }
@@ -50,26 +50,26 @@ describe Calculators::AmortizationSchedule do
       }
     end
 
-    let(:monthly_payment_params) do
+    let(:period_payment_params) do
       {
-        starting_principal_balance: starting_principal_balance,
+        starting_principal_cents: starting_principal_cents,
         annual_interest_rate: annual_interest_rate,
-        scheduled_monthly_payment_amount: scheduled_monthly_payment_amount,
+        scheduled_period_payment_cents: scheduled_period_payment_cents,
         opts: opts
       }
     end
 
     let(:schedule) do
-      described_class.generate(monthly_payment_params)
+      described_class.generate(period_payment_params)
     end
 
     context 'additional payments' do
       let(:additional_amount_per_period) { 2_800_00 }
-      let(:monthly_payment_params) do
+      let(:period_payment_params) do
         {
-          starting_principal_balance: starting_principal_balance,
+          starting_principal_cents: starting_principal_cents,
           annual_interest_rate: annual_interest_rate,
-          scheduled_monthly_payment_amount: scheduled_monthly_payment_amount,
+          scheduled_period_payment_cents: scheduled_period_payment_cents,
           opts: {
             additional_payments: {
               start_period: start_period,
@@ -79,12 +79,52 @@ describe Calculators::AmortizationSchedule do
         }
       end
 
-      let(:schedule) do
-        described_class.generate(monthly_payment_params)
+      let(:schedule) { described_class.generate(period_payment_params) }
+
+      context 'from the middle of the schedule' do
+        let(:start_period) { 10 }
+
+        it 'returns the right number of payments' do
+          expect(schedule.count).to eq(36)
+        end
+
+        it 'total payments paid is correct' do
+          total_paid = schedule
+            .map{ |p|
+              p[:total_payment_for_period]
+            }
+            .reduce(&:+)
+            .to_i
+
+          expect(total_paid).to eq(8860563)
+        end
+
+        it 'last payment should be remaining balance' do
+          expect(schedule.last[:total_payment_for_period].to_i).to eq(270758)
+        end
       end
 
-      it 'calculates additional payments per pay period' do
-        expect(schedule.count).to eq(27)
+      context 'from the start of the schedule' do
+        let(:start_period) { 0 }
+
+        it 'returns the right number of payments' do
+          expect(schedule.count).to eq(27)
+        end
+
+        it 'total payments paid is correct' do
+          total_paid = schedule
+            .map{ |p|
+              p[:total_payment_for_period]
+            }
+            .reduce(&:+)
+            .to_i
+
+          expect(total_paid).to eq(8507222)
+        end
+
+        it 'last payment should be remaining balance' do
+          expect(schedule.last[:total_payment_for_period].to_i).to eq(46224)
+        end
       end
     end
 
