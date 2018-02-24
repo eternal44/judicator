@@ -4,13 +4,13 @@ class Calculators::MonthlyMortgageAmount < Calculators::CalculationAmount
   end
 
   def initialize(annual_interest_rate:,
-                starting_loan_principal:,
+                starting_principal_cents:,
                 terms_in_months:)
 
-    super(annual_interest_rate, starting_loan_principal, terms_in_months)
+    super(annual_interest_rate, starting_principal_cents, terms_in_months)
 
     @annual_interest_rate = annual_interest_rate
-    @starting_loan_principal = starting_loan_principal
+    @starting_principal_cents = starting_principal_cents
     @terms_in_months = terms_in_months
     @monthly_interest_rate = self.calculate_monthly_interest_rate(annual_interest_rate)
   end
@@ -19,7 +19,7 @@ class Calculators::MonthlyMortgageAmount < Calculators::CalculationAmount
     numerator = calculate_numerator
     denominator = calculate_denominator
 
-    @starting_loan_principal * (numerator / denominator)
+    @starting_principal_cents * (numerator / denominator)
   end
 
   def calculate_numerator
