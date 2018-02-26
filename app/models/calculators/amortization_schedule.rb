@@ -1,4 +1,4 @@
-class Calculators::AmortizationSchedule
+class Calculators::AmortizationSchedule < Calculators::CalculationAmount
   def self.generate(params)
     new(params).generate
   end
@@ -6,12 +6,19 @@ class Calculators::AmortizationSchedule
   def initialize(scheduled_period_payment_cents:,
                 starting_principal_cents:,
                 annual_interest_rate:,
+                payments_per_year:,
                 opts:)
 
-    @scheduled_period_payment_cents = scheduled_period_payment_cents
-    @period_interest_rate = (annual_interest_rate / 12)
+    @scheduled_period_payment_cents,
+    @starting_principal_cents,
+    annual_interest_rate,
+    payments_per_year = super(scheduled_period_payment_cents,
+                              starting_principal_cents,
+                              annual_interest_rate,
+                              payments_per_year)
+
+    @period_interest_rate = (annual_interest_rate / payments_per_year)
     @opts = opts
-    @starting_principal_cents = starting_principal_cents
   end
 
   def generate

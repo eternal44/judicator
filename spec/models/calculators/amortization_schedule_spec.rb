@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Calculators::AmortizationSchedule do
-  let(:starting_principal_cents) { 80_000_00.rationalize }
-  let(:annual_interest_rate) { 0.055.rationalize }
-  let(:scheduled_period_payment_cents) { 454_23.rationalize }
+  let(:starting_principal_cents) { 80_000_00 }
+  let(:annual_interest_rate) { 0.055 }
+  let(:scheduled_period_payment_cents) { 454_23 }
 
   context 'with the correct inputs' do
 
@@ -12,6 +12,7 @@ describe Calculators::AmortizationSchedule do
         starting_principal_cents: starting_principal_cents,
         annual_interest_rate: annual_interest_rate,
         scheduled_period_payment_cents: scheduled_period_payment_cents,
+        payments_per_year: 12,
         opts: {}
       }
     end
@@ -37,8 +38,8 @@ describe Calculators::AmortizationSchedule do
   end
 
   context 'options params' do
-    let(:starting_principal_cents) { 80_000_00.rationalize }
-    let(:annual_interest_rate) { 0.055.rationalize }
+    let(:starting_principal_cents) { 80_000_00 }
+    let(:annual_interest_rate) { 0.055 }
     let(:start_period) { 1 }
     let(:additional_amount_per_period) { 2_800_00 }
     let(:opts) do
@@ -55,6 +56,7 @@ describe Calculators::AmortizationSchedule do
         starting_principal_cents: starting_principal_cents,
         annual_interest_rate: annual_interest_rate,
         scheduled_period_payment_cents: scheduled_period_payment_cents,
+        payments_per_year: 12,
         opts: opts
       }
     end
@@ -70,6 +72,7 @@ describe Calculators::AmortizationSchedule do
           starting_principal_cents: starting_principal_cents,
           annual_interest_rate: annual_interest_rate,
           scheduled_period_payment_cents: scheduled_period_payment_cents,
+          payments_per_year: 12,
           opts: {
             additional_payments: {
               start_period: start_period,
