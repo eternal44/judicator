@@ -1,7 +1,7 @@
 class Calculators::CalculationAmount
   def initialize(*args)
-    format(args)
     validate(args)
+    format(args)
   end
 
   def format(args)

@@ -4,8 +4,8 @@ class Calculators::MonthlyMortgageAmount < Calculators::CalculationAmount
   end
 
   def initialize(annual_interest_rate:,
-                starting_principal_cents:,
-                terms_in_months:)
+                 starting_principal_cents:,
+                 terms_in_months:)
 
     @annual_interest_rate,
     @starting_principal_cents,
