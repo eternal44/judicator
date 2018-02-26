@@ -7,11 +7,12 @@ class Calculators::MonthlyMortgageAmount < Calculators::CalculationAmount
                 starting_principal_cents:,
                 terms_in_months:)
 
-    super(annual_interest_rate, starting_principal_cents, terms_in_months)
+    @annual_interest_rate,
+    @starting_principal_cents,
+    @terms_in_months = super(annual_interest_rate,
+                             starting_principal_cents,
+                             terms_in_months)
 
-    @annual_interest_rate = annual_interest_rate
-    @starting_principal_cents = starting_principal_cents
-    @terms_in_months = terms_in_months
     @monthly_interest_rate = self.calculate_monthly_interest_rate(annual_interest_rate)
   end
 
