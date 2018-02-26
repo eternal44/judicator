@@ -21,6 +21,15 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
     @opts = opts
   end
 
+  # @return Array of objects
+  #
+  # {
+  #   total_payment_for_period: RationalNumber,
+  #   principal_amount: RationalNumber,
+  #   interest_amount: RationalNumber,
+  #   principal_balance_amount: RationalNumber
+  # }
+  #
   def generate
     generate_schedule([], @starting_principal_cents)
   end
