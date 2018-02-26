@@ -5,7 +5,7 @@ describe Calculators::CalculationAmount do
     let(:amount) { 100 }
 
     it 'raise an argument error' do
-      expect{ described_class.new(amount) }.to raise_error(ArgumentError)
+      expect{ described_class.new(amount).validate }.to raise_error(ArgumentError)
     end
   end
 
@@ -14,7 +14,7 @@ describe Calculators::CalculationAmount do
     let(:loan_balance) {-100_000.rationalize}
 
     it 'throws an error' do
-      expect{ described_class.new(rate, loan_balance) }.to raise_error(ArgumentError)
+      expect{ described_class.new(rate, loan_balance).validate }.to raise_error(ArgumentError)
     end
   end
 end

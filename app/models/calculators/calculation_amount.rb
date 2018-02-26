@@ -1,11 +1,18 @@
 class Calculators::CalculationAmount
   def initialize(*args)
+    format(args)
     validate(args)
+  end
+
+  def format(args)
+    args.map do |arg|
+      arg.rationalize
+    end
   end
 
   def validate(args)
     args.each do |arg|
-      raise ArgumentError, 'non-rational number' unless arg.is_a?(Rational)
+      raise ArgumentError, 'non-rational number' unless arg.respond_to?(:rationalize)
       raise ArgumentError, 'negative number' unless arg.positive?
     end
   end
