@@ -50,23 +50,31 @@ describe Calculators::OptimalDownpay do
       .generate(additional_payments_params)
   end
 
-  it 'calculates schedule as expected' do
-    period = described_class
-      .new(no_additional_payments_schedule, with_additional_payments_schedule)
-      .no_additional_payments_schedule
-      .first
+  context 'basic assumptions' do
+    it 'bi-weekly payments should be half of monthly payments' do
+    end
 
-    expected_period = {
-      :interest_amount => (110000/3.to_r),
-      :principal_amount => (26269/3.to_r),
-      :principal_balance_amount => (23973731/3.to_r),
-      :total_payment_for_period => (45423/1.to_r)
-    }
+    it 'bi-weekly payments should end sooner than monthly payments' do
+    end
 
-    expect(period).to eq(expected_period)
+    it 'calculates schedule as expected' do
+      period = described_class
+        .new(no_additional_payments_schedule, with_additional_payments_schedule)
+        .no_additional_payments_schedule
+        .first
 
-    period.values.each do |value|
-      expect(value.class).to eq(Rational)
+      expected_period = {
+        :interest_amount => (110000/3.to_r),
+        :principal_amount => (26269/3.to_r),
+        :principal_balance_amount => (23973731/3.to_r),
+        :total_payment_for_period => (45423/1.to_r)
+      }
+
+      expect(period).to eq(expected_period)
+
+      period.values.each do |value|
+        expect(value.class).to eq(Rational)
+      end
     end
   end
 end
