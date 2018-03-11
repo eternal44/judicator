@@ -50,8 +50,43 @@ describe Calculators::OptimalDownpay do
       .generate(additional_payments_params)
   end
 
-  context 'basic assumptions' do
+  context 'payment frequency: ' do
+    let(:monthly_payment_params) do
+      {
+        starting_principal_cents: starting_principal_cents,
+        annual_interest_rate: annual_interest_rate,
+        scheduled_period_payment_cents: scheduled_period_payment_cents,
+        payments_per_year: 12,
+        opts: {}
+      }
+    end
+
+    let(:bi_monthly_payment_params) do
+      {
+        starting_principal_cents: starting_principal_cents,
+        annual_interest_rate: annual_interest_rate,
+        scheduled_period_payment_cents: scheduled_period_payment_cents / 2,
+        payments_per_year: 24,
+        opts: {}
+      }
+    end
+
+    let(:monthly_payment_schedule) do
+      amortization_schedule = Calculators::AmortizationSchedule
+        .generate(monthly_payment_params)
+    end
+
+    let(:bi_monthly_payment_schedule) do
+      amortization_schedule = Calculators::AmortizationSchedule
+        .generate(bi_monthly_payment_params)
+    end
+
     it 'bi-weekly payments should be half of monthly payments' do
+       = described_class
+        .new(monthly, with_additional_payments_schedule)
+        .no_additional_payments_schedule
+        .first
+
     end
 
     it 'bi-weekly payments should end sooner than monthly payments' do
