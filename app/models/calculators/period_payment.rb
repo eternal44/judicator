@@ -5,17 +5,22 @@ class Calculators::PeriodPayment < Calculators::CalculationAmount
 
   def initialize(annual_interest_rate:,
                  starting_principal_cents:,
-                 terms_in_months:,
+                 loan_life_in_years:,
                  periods_per_year:)
 
-    @annual_interest_rate,
-    @starting_principal_cents,
-    @terms_in_months = super(annual_interest_rate,
-                             starting_principal_cents,
-                             terms_in_months)
+    annual_interest_rate,
+    periods_per_year,
+    loan_life_in_years,
+    @starting_principal_cents = super(annual_interest_rate,
+                                      periods_per_year,
+                                      loan_life_in_years,
+                                      starting_principal_cents)
+
+    @terms_in_periods = self
+      .define_terms_in_periods(loan_life_in_years, periods_per_year)
 
     @period_interest_rate = self
-      .period_interest_rate(annual_interest_rate, periods_per_year)
+      .define_period_interest_rate(annual_interest_rate, periods_per_year)
   end
 
   def call
@@ -23,14 +28,18 @@ class Calculators::PeriodPayment < Calculators::CalculationAmount
   end
 
   def numerator
-    @period_interest_rate * ((1 + @period_interest_rate) ** @terms_in_months)
+    @period_interest_rate * ((1 + @period_interest_rate) ** @terms_in_periods)
   end
 
   def denominator
-    ((1 + @period_interest_rate) ** @terms_in_months) - 1
+    ((1 + @period_interest_rate) ** @terms_in_periods) - 1
   end
 
-  def period_interest_rate(annual_interest_rate, periods_per_year)
+  def define_terms_in_periods(loan_life_in_years, periods_per_year)
+    loan_life_in_years * periods_per_year
+  end
+
+  def define_period_interest_rate(annual_interest_rate, periods_per_year)
     (annual_interest_rate / 100) / periods_per_year
   end
 end
