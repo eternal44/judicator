@@ -179,29 +179,9 @@ describe Calculators::AmortizationSchedule do
       end
 
       it 'bi-weekly payments should be half of monthly payments' do
-        bi_weekly_payment_scheduled_payment = bi_weekly_payment_schedule.first[:total_payment_for_period]
-        monthly_payment_scheduled_payment = monthly_payment_schedule.first[:total_payment_for_period]
-        binding.pry
-
-        expect(bi_weekly_payment_scheduled_payment * 2).to eq(monthly_payment_scheduled_payment)
       end
 
       it 'bi-weekly payments should end sooner than monthly payments' do
-      end
-
-      it 'calculates schedule as expected' do
-        expected_period = {
-          :interest_amount => (110000/3.to_r),
-          :principal_amount => (26269/3.to_r),
-          :principal_balance_amount => (23973731/3.to_r),
-          :total_payment_for_period => (45423/1.to_r)
-        }
-
-        expect(period_1_monthly_payment_schedule).to eq(expected_period)
-
-        period_1_monthly_payment_schedule.values.each do |value|
-          expect(value.class).to eq(Rational)
-        end
       end
     end
   end
