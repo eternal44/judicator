@@ -36,7 +36,7 @@ describe Calculators::AmortizationSchedule do
     end
 
     it 'last payment should have 0 remaining balance' do
-      expect(schedule.last[:principal_balance_amount]).to eq(0)
+      expect(schedule.last[:remaining_principal]).to eq(0)
     end
 
     it 'should have 360 payments' do
