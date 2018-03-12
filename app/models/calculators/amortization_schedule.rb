@@ -48,26 +48,46 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
     principal_amount = period_payment_amount - interest_amount
     new_remaining_principal = remaining_principal - principal_amount
 
-    period_payment_object = {
-      total_payment_for_period: period_payment_amount,
-      principal_amount: principal_amount,
-      interest_amount: interest_amount,
-      remaining_principal: new_remaining_principal
-    }
+    period_payment_object = generate_period_payment_object(
+      remaining_principal: remaining_principal,
+      period_interest_rate: @period_interest_rate,
+      period_payment_amount: period_payment_amount,
+      interest_amount: interest_amount)
 
     if (remaining_principal + interest_amount) <= period_payment_amount
-      schedule << {
-        total_payment_for_period: remaining_principal + interest_amount,
-        principal_amount: remaining_principal,
-        interest_amount: interest_amount,
-        remaining_principal: 0
-      }
+      schedule << period_payment_object
 
       return schedule
     else
       schedule << period_payment_object
 
       generate_schedule(schedule, new_remaining_principal)
+    end
+  end
+
+  def generate_period_payment_object(remaining_principal:,
+                                          period_interest_rate:,
+                                          period_payment_amount:,
+                                          interest_amount:)
+
+    interest_amount = remaining_principal * period_interest_rate
+    principal_amount = period_payment_amount - interest_amount
+    new_remaining_principal = remaining_principal - principal_amount
+
+    if (remaining_principal + interest_amount) <= period_payment_amount
+      {
+        total_payment_for_period: remaining_principal + interest_amount,
+        principal_amount: remaining_principal,
+        interest_amount: interest_amount,
+        remaining_principal: 0
+      }
+    else
+      {
+        total_payment_for_period: period_payment_amount,
+        principal_amount: principal_amount,
+        interest_amount: interest_amount,
+        remaining_principal: new_remaining_principal
+      }
     end
   end
 
