@@ -56,6 +56,8 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
     period_payment_object = generate_period_payment_object(
       remaining_principal: remaining_principal,
       period_interest_rate: @period_interest_rate,
+      principal_amount: principal_amount,
+      new_remaining_principal: new_remaining_principal,
       period_payment_amount: period_payment_amount,
       interest_amount: interest_amount)
 
@@ -72,12 +74,10 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
 
   def generate_period_payment_object(remaining_principal:,
                                           period_interest_rate:,
+                                          principal_amount:,
+                                          new_remaining_principal:,
                                           period_payment_amount:,
                                           interest_amount:)
-
-    interest_amount = remaining_principal * period_interest_rate
-    principal_amount = period_payment_amount - interest_amount
-    new_remaining_principal = remaining_principal - principal_amount
 
     if (remaining_principal + interest_amount) <= period_payment_amount
       {
