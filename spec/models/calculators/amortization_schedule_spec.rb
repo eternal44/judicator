@@ -42,6 +42,16 @@ describe Calculators::AmortizationSchedule do
     it 'should have 360 payments' do
       expect(schedule.count).to eq(360)
     end
+
+    it 'all principal payments add up to starting principal cents' do
+      principal_paid_total = schedule.reduce(0) do |memo, period|
+        memo += period[:principal_amount]
+
+        memo
+      end
+
+      expect(principal_paid_total.to_i).to eq(starting_principal_cents)
+    end
   end
 
   context 'options params' do
@@ -154,13 +164,13 @@ describe Calculators::AmortizationSchedule do
     end
 
     # TODO: don't do bi-weekly - just do additional payments
-    context 'payment frequency: ' do
+    xcontext 'payment frequency: ' do
       let(:monthly_payment_params) do
         {
-          starting_principal_cents: starting_principal_cents,
-          annual_interest_rate: annual_interest_rate,
-          scheduled_period_payment_cents: scheduled_period_payment_cents,
-          payments_per_year: 12,
+          starting_principal_cents: 100_000_00.to_r,
+          annual_interest_rate: 6.to_r,
+          scheduled_period_payment_cents: 299_78.to_r,
+          payments_per_year: 26,
           opts: {}
         }
       end
@@ -185,7 +195,7 @@ describe Calculators::AmortizationSchedule do
           .generate(bi_weekly_payment_params)
       end
 
-      it 'bi-weekly payments should be half of monthly payments' do
+      it 'monthly payments should be half of monthly payments' do
       end
 
       it 'bi-weekly payments should end sooner than monthly payments' do
