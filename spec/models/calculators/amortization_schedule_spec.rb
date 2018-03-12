@@ -2,8 +2,15 @@ require 'rails_helper'
 
 describe Calculators::AmortizationSchedule do
   let(:starting_principal_cents) { 80_000_00 }
-  let(:annual_interest_rate) { 0.055 }
-  let(:scheduled_period_payment_cents) { 454_23 }
+  let(:annual_interest_rate) { 5.5 }
+  let(:scheduled_period_payment_cents) {
+    Calculators::PeriodPayment.call({
+      annual_interest_rate: annual_interest_rate,
+      starting_principal_cents: starting_principal_cents,
+      loan_life_in_years: 30,
+      periods_per_year: 12
+    }).to_i
+  }
 
   context 'with the correct inputs' do
 
@@ -39,7 +46,7 @@ describe Calculators::AmortizationSchedule do
 
   context 'options params' do
     let(:starting_principal_cents) { 80_000_00 }
-    let(:annual_interest_rate) { 0.055 }
+    let(:annual_interest_rate) { 5.5 }
     let(:start_period) { 1 }
     let(:additional_amount_per_period) { 2_800_00 }
     let(:opts) do

@@ -17,7 +17,7 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
                               annual_interest_rate,
                               payments_per_year)
 
-    @period_interest_rate = (annual_interest_rate / payments_per_year)
+    @period_interest_rate = ((annual_interest_rate / 100)/ payments_per_year)
     @opts = opts
   end
 
