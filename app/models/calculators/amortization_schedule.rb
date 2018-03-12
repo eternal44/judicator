@@ -46,13 +46,13 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
 
     interest_amount = remaining_balance * @period_interest_rate
     principal_amount = period_payment_amount - interest_amount
-    principal_balance_amount = remaining_balance - principal_amount
+    new_remaining_principal = remaining_balance - principal_amount
 
     period_payment_object = {
       total_payment_for_period: period_payment_amount,
       principal_amount: principal_amount,
       interest_amount: interest_amount,
-      principal_balance_amount: principal_balance_amount
+      principal_balance_amount: new_remaining_principal
     }
 
     if (remaining_balance) <= period_payment_amount
@@ -69,7 +69,7 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
     else
       schedule << period_payment_object
 
-      generate_schedule(schedule, principal_balance_amount)
+      generate_schedule(schedule, new_remaining_principal)
     end
   end
 
