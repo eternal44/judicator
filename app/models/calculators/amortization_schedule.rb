@@ -36,12 +36,17 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
 
   def generate_schedule(schedule, remaining_principal)
     period_payment_amount = @scheduled_period_payment_cents
-    additional_payment_instructions = @opts[:additional_payments]
+    additional_payment_instructions = @opts.fetch(:additional_payments) do
+      { start_period: -1,
+        amount_per_period: 0 }
+    end
 
-    if additional_payment_instructions &&
-        schedule.count >= additional_payment_instructions[:start_period]
+    start_period, amount_per_period = additional_payment_instructions
+      .values_at(:start_period,
+                 :amount_per_period)
 
-      period_payment_amount += additional_payment_instructions.fetch(:amount_per_period, 0)
+    if schedule.count >= start_period
+      period_payment_amount += amount_per_period
     end
 
     interest_amount = remaining_principal * @period_interest_rate
