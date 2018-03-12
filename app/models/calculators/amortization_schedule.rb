@@ -55,7 +55,7 @@ class Calculators::AmortizationSchedule < Calculators::CalculationAmount
       remaining_principal: new_remaining_principal
     }
 
-    if remaining_principal <= period_payment_amount
+    if (remaining_principal + interest_amount) <= period_payment_amount
       schedule << {
         total_payment_for_period: remaining_principal + interest_amount,
         principal_amount: remaining_principal,
