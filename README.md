@@ -1,32 +1,30 @@
 # README
-TODO: figure out bi-weekly payment formula
-  not sure why it's not working
-  https://www.mortgagecalculator.biz/c/additional-payments.php
 
-All money figures are in cents unless stated otherwise... but they shouldn't be in other amounts
-All interest figures are represented the way you'd say them
+### Description:
+This is a POC Rails API for comparing SFRs (Single Family Residents) to
+evaluate their long term value as an investment property. My goals for
+picking a property keep shifting so I've decided to pause development
+on this project until I solidify my goals.
+
+Click here for the DB schema ([diagram](https://github.com/eternal44/judicator/blob/master/judicator.pdf))
+
+
+### Conventions:
+- All money figures are in cents unless stated otherwise
+- All interest figures are represented the way you'd say them
   ex:  4.5 percent is represented as 4.5 (not 0.045)
 
-## TODO:
--  figure out how we want to use this model
-    do we want to pull reports for properties?
+### Resources:
+- compound interest ([calculator](https://www.thecalculatorsite.com/articles/finance/compound-interest-formula.php))
+- bi-weekly payments ([calculator](https://www.mortgagecalculator.biz/c/additional-payments.php))
 
-# COCKTAIL knapkin calcs:
-
-*** Alternative investment calculator ***:
-  Use for investment comparisons
-  compound interest:
-    https://www.thecalculatorsite.com/articles/finance/compound-interest-formula.php
-
-house:
-  starting principal = downpayment + ( - closing costs + additional payments + additional costs)
-    total return will be the total property value
-     x - how do you calc appreciation?
-
-  ex: 20k + (5k + additional_payments + 2k)
-
-  calc time to loan paydown
-  compare it to compound interest
-
-also compare 20, 30 & 60 yrs
+### TODO:
+- figure out bi-weekly payment formula
+- figure out how we want to use this model
+- figure out how to forecast earnings for the following:
+  appreciation
+  vacancies
+  building depreciation
+  maintenance costs
+  scheduled replacements
 
