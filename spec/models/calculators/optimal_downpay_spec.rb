@@ -1,9 +1,5 @@
 require 'rails_helper'
 
-def format_money(cent_amount)
-  Money.new(cent_amount).format
-end
-
 describe Calculators::OptimalDownpay do
   let(:starting_principal_cents) { 80_000_00 }
   let(:annual_interest_rate) { 0.055 }
@@ -79,17 +75,6 @@ describe Calculators::OptimalDownpay do
     let(:bi_monthly_payment_schedule) do
       amortization_schedule = Calculators::AmortizationSchedule
         .generate(bi_monthly_payment_params)
-    end
-
-    it 'bi-weekly payments should be half of monthly payments' do
-       = described_class
-        .new(monthly, with_additional_payments_schedule)
-        .no_additional_payments_schedule
-        .first
-
-    end
-
-    it 'bi-weekly payments should end sooner than monthly payments' do
     end
 
     it 'calculates schedule as expected' do

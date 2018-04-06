@@ -164,45 +164,6 @@ describe Calculators::AmortizationSchedule do
 
     context 'additional payments' do
     end
-
-    # TODO: don't do bi-weekly - just do additional payments
-    xcontext 'payment frequency: ' do
-      let(:monthly_payment_params) do
-        {
-          starting_principal_cents: 100_000_00.to_r,
-          annual_interest_rate: 6.to_r,
-          scheduled_period_payment_cents: 299_78.to_r,
-          payments_per_year: 26,
-          opts: {}
-        }
-      end
-
-      let(:bi_weekly_payment_params) do
-        {
-          starting_principal_cents: starting_principal_cents,
-          annual_interest_rate: annual_interest_rate,
-          scheduled_period_payment_cents: scheduled_period_payment_cents,
-          payments_per_year: 13,
-          opts: {}
-        }
-      end
-
-      let(:monthly_payment_schedule) do
-        amortization_schedule = Calculators::AmortizationSchedule
-          .generate(monthly_payment_params)
-      end
-
-      let(:bi_weekly_payment_schedule) do
-        amortization_schedule = Calculators::AmortizationSchedule
-          .generate(bi_weekly_payment_params)
-      end
-
-      it 'monthly payments should be half of monthly payments' do
-      end
-
-      it 'bi-weekly payments should end sooner than monthly payments' do
-      end
-    end
   end
 end
 
