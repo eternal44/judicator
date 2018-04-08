@@ -1,6 +1,41 @@
 require 'rails_helper'
 
 describe Calculators::AmortizationSchedule do
+  context 'bi-weekly payments' do
+    let(:starting_principal_cents) { 80_000_00 }
+    let(:annual_interest_rate) { 5.5 }
+    let(:scheduled_period_payment_cents) {
+      (Calculators::PeriodPayment.call({
+        annual_interest_rate: annual_interest_rate,
+        starting_principal_cents: starting_principal_cents,
+        loan_life_in_years: 30,
+        periods_per_year: 12
+      }) / 2).to_i
+    }
+
+    let(:period_payment_params) do
+      {
+        starting_principal_cents: starting_principal_cents,
+        annual_interest_rate: annual_interest_rate,
+        scheduled_period_payment_cents: scheduled_period_payment_cents,
+        payments_per_year: 26,
+        opts: {}
+      }
+    end
+
+    let(:schedule) do
+      described_class.generate(period_payment_params)
+    end
+
+    it 'has the right bi-weekly payment amount' do
+      expect(scheduled_period_payment_cents).to eq(227_11)
+    end
+
+    it 'has the right number of periods' do
+      expect(schedule.count).to eq(647)
+    end
+  end
+
   context 'regular payment schedule' do
     let(:starting_principal_cents) { 80_000_00 }
     let(:annual_interest_rate) { 5.5 }
