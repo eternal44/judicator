@@ -1,7 +1,11 @@
 class Calculators::OptimalDownpay
-  # TODO: change signature to take a block?  Probably not - too much nesting
+  # TODO: change function signature to take a hash instead
   def self.call(*params)
-    new(params).call
+    new(params).call do |scenario_result|
+      yield scenario_result if block_given?
+
+      scenario_result
+    end
   end
 
   def initialize(params)
@@ -25,17 +29,20 @@ class Calculators::OptimalDownpay
       total_interest_paid = schedule
         .reduce(0) {|total, current_period|
           total += current_period[:interest_amount]
-        }
+      }.to_i
 
       total_additional_payments = schedule.count * additional_payment
 
-      {
+      scenario_result = {
         additional_payment: additional_payment,
         number_of_terms: schedule.count,
-        total_interest_paid: total_interest_paid.to_i,
+        total_interest_paid: total_interest_paid,
         total_additional_payments: total_additional_payments
       }
-    }
 
+      yield scenario_result if block_given?
+
+      scenario_result
+    }
   end
 end
