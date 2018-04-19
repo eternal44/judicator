@@ -4,7 +4,7 @@ describe Calculators::CompoundInterest do
   context 'calculates compound interest' do
     it 'with no periodic deposits' do
       calc_params = {
-        annual_interest_rate: 0.055,
+        annual_interest_rate: 5.5,
         compounding_periods_per_year: 24,
         periodic_deposit: 0,
         starting_principal: 20_000_00,
@@ -19,7 +19,7 @@ describe Calculators::CompoundInterest do
 
     it 'with no starting deposit' do
       calc_params = {
-        annual_interest_rate: 0.04,
+        annual_interest_rate: 4,
         compounding_periods_per_year: 12,
         periodic_deposit: 100,
         starting_principal: 0,
@@ -33,7 +33,7 @@ describe Calculators::CompoundInterest do
 
     it 'with a starting & periodic deposit' do
       calc_params = {
-        annual_interest_rate: 0.04,
+        annual_interest_rate: 4,
         compounding_periods_per_year: 12,
         periodic_deposit: 100,
         starting_principal: 2_500_00,
