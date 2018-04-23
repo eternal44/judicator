@@ -9,9 +9,10 @@ module Calculators::CompoundInterest
 
     periodic_rate = annual_interest_rate / 100.0 / periods_per_year
     compounding_duration = periods_per_year * timeframe_in_years.to_f
+    compound_effect = (1 + periodic_rate) ** compounding_duration
 
-    starting_principal_result = (starting_principal * (1 + periodic_rate) ** compounding_duration)
-    periodic_deposit_result = (periodic_deposit * (((1 + periodic_rate) ** compounding_duration) - 1) / periodic_rate)
+    starting_principal_result = (starting_principal * compound_effect)
+    periodic_deposit_result = (periodic_deposit * (compound_effect - 1) / periodic_rate)
 
     (starting_principal_result + periodic_deposit_result).round
   end

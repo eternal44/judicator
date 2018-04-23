@@ -5,44 +5,43 @@ describe Calculators::CompoundInterest do
     it 'with no periodic deposits' do
       calc_params = {
         annual_interest_rate: 5.5,
-        compounding_periods_per_year: 24,
+        periods_per_year: 26,
         periodic_deposit: 0,
         starting_principal: 20_000_00,
         timeframe_in_years: 31,
       }
 
-      comparision_return = described_class.call(calc_params)
+      comparision_return = described_class.calc(calc_params)
 
-      expect(comparision_return).to eq(10981329)
+      expect(comparision_return).to eq(109_829_75)
     end
-
 
     it 'with no starting deposit' do
       calc_params = {
         annual_interest_rate: 4,
-        compounding_periods_per_year: 12,
-        periodic_deposit: 100,
+        periods_per_year: 12,
+        periodic_deposit: 100_00,
         starting_principal: 0,
         timeframe_in_years: 5,
       }
 
-      comparision_return = described_class.call(calc_params)
+      comparision_return = described_class.calc(calc_params)
 
-      expect(comparision_return).to eq(6_652_00)
+      expect(comparision_return).to eq(6_629_90)
     end
 
     it 'with a starting & periodic deposit' do
       calc_params = {
         annual_interest_rate: 4,
-        compounding_periods_per_year: 12,
-        periodic_deposit: 100,
+        periods_per_year: 12,
+        periodic_deposit: 100_00,
         starting_principal: 2_500_00,
         timeframe_in_years: 5,
       }
 
-      result = described_class.call(calc_params)
+      result = described_class.calc(calc_params)
 
-      expect(result).to eq(970449)
+      expect(result).to eq(968239)
     end
   end
 end
