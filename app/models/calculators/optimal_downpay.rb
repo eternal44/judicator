@@ -1,5 +1,12 @@
 class Calculators::OptimalDownpay
+  # TODO: use lazy evaluation 
+  # TODO: change this so I can switch out the compound interest calc with whatever other
+  #   alternative investment model I want
   # TODO: change function signature to take a hash instead
+  # TODO: change @additional_payments_params to be a generic hash that takes instructions for:
+  #   additional payments
+  #   start_period
+  #   starting down payment (for alternative calcs)
   def self.call(*params)
     new(params).call do |scenario_result|
       yield scenario_result if block_given?

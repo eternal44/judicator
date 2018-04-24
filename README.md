@@ -1,4 +1,6 @@
 # README
+modules
+https://www.rubytapas.com/2013/01/18/episode-048-memoize/
 
 ### Description:
 This is a POC Rails API for comparing SFRs (Single Family Residents) to
